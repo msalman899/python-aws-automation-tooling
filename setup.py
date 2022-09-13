@@ -10,7 +10,7 @@ setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.8",
     install_requires=[
-        "boto3==1.24.40",
-        "botocore==1.27.40",
+        # "boto3==1.24.40",
+        # "botocore==1.27.40",
     ]
 )
