@@ -7,7 +7,7 @@ class Rds():
     def __init__(self):
         self.boto_client = boto3.client('rds')
 
-    def get_rds_instances(self,exclude_replica=True):
+    def get_rds_instances(self,exclude_replica=True,exclude_cluster_nodes=True):
         """
         Return list of all RDS instances
         exclude_replica: flag to exclude replica
@@ -19,8 +19,11 @@ class Rds():
         for page in paginator:
             rds_instances.extend(page['DBInstances'])
 
+        if exclude_cluster_nodes:
+            rds_instances = list(filter(lambda item: ("DBClusterIdentifier" not in item or "ReadReplicaSourceDBInstanceIdentifier" in item), rds_instances))
+
         if exclude_replica:
-            rds_instances = list(filter(lambda item: "replica-" not in item.get("DBInstanceIdentifier"), self.rds_instances))
+            rds_instances = list(filter(lambda item: "ReadReplicaSourceDBInstanceIdentifier" not in item, rds_instances))
         
         return rds_instances
 
